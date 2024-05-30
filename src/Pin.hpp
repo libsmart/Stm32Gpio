@@ -7,7 +7,7 @@
 #define LIBSMART_STM32GPIO_PIN_H
 
 #include "libsmart_config.hpp"
-#include "main.h"
+#include <main.h>
 #include <cstdint>
 #include "PinInterface.hpp"
 #include "Helper.hpp"

@@ -6,6 +6,11 @@
 #ifndef LIBSMART_STM32GPIO_PINANALOGIN_H
 #define LIBSMART_STM32GPIO_PINANALOGIN_H
 
+#include <libsmart_config.hpp>
+#include <main.h>
+
+#ifdef HAL_ADC_MODULE_ENABLED
+
 #include "Pin.hpp"
 #include "adc.h"
 
@@ -105,4 +110,5 @@ namespace Stm32Gpio {
     };
 }
 
-#endif //LIBSMART_STM32GPIO_PINANALOGIN_H
+#endif
+#endif

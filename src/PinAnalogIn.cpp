@@ -5,6 +5,8 @@
 
 #include "PinAnalogIn.hpp"
 
+#ifdef HAL_ADC_MODULE_ENABLED
+
 using namespace Stm32Gpio;
 
 void PinAnalogIn::loop() {
@@ -14,3 +16,4 @@ void PinAnalogIn::loop() {
 //    lastLoopAdcValue = readValue();
 }
 
+#endif
