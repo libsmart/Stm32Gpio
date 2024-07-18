@@ -42,6 +42,14 @@ namespace Stm32Gpio {
     public:
         using onChangeCallback = void (*)(PinInterface *pin);
         using loopCallback = void (*)(PinInterface *pin);
+        /**
+         * @brief Set the onChange callback function.
+         *
+         * This method sets the onChangeCallback function for the current object. The onChangeCallback
+         * is a function that gets called whenever there is a change in the state of the object.
+         *
+         * @param cb The onChange callback function to be set.
+         */
         virtual void setOnChangeCallback(const onChangeCallback cb) { cb_onChange = cb; }
         virtual void setLoopCallback(const loopCallback cb) { cb_loop = cb; }
 
@@ -55,6 +63,16 @@ namespace Stm32Gpio {
     public:
         using onChangeFunction = std::function<void()>;
         using loopFunction = std::function<void()>;
+        /**
+         * @brief Set the onChange callback function.
+         *
+         * This method sets the onChangeCallback function for the current object. The onChangeCallback
+         * is a function that gets called whenever there is a change in the state of the object.
+         *
+         * @param cb The onChange callback function to be set.
+         *
+         * @see onChangeFunction
+         */
         virtual void setOnChangeCallback(const onChangeFunction &cb) { fn_onChange = cb; }
         virtual void setLoopCallback(const loopFunction &fn) { fn_loop = fn; }
 
