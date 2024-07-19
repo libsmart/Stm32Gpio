@@ -98,7 +98,7 @@ namespace Stm32Gpio {
             return (int16_t) ((110L * ((int64_t) val - 10L)) / (2730L - 10L));
         }
 
-        int8_t readCalculatedValue() {
+        int16_t readCalculatedValue() {
             return calculateValue(readValue());
         }
 
