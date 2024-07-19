@@ -71,7 +71,7 @@ namespace Stm32Gpio {
             return currentAdcValueReady ? currentAdcValue : (currentAdcValue = readValueFromAdc());
         }
 
-        static int8_t calculateValue(uint32_t val) {
+        static int16_t calculateValue(uint32_t val) {
             /*
              * 0    |    0V |  0mA | -27%
              * 819  | 0.66V |  4mA |   0%
@@ -82,7 +82,20 @@ namespace Stm32Gpio {
              * v(0) = 20mA*4096/I = 20mA*4096/4mA = 819.2
              * p = 110*(v-819)/(4096-819) =
              */
-            return (int8_t) ((110L * ((int64_t) val - 819L)) / (4096L - 819L));
+            // return (int16_t) ((110L * ((int64_t) val - 819L)) / (4096L - 819L));
+
+
+
+            /*
+             * 0    |    0V |  0mA |   0%
+             * 10   |    0V |  5mA |   0%
+             * 2730 | 2.12V | 20mA | 110%
+             *
+             * R = U/I = 2.12V/20mA = 106Ω
+             * U(0) = R*I(0) = 106Ω*4mA = 0.424V
+             * p = 110*(v-10)/(2730-10) =
+             */
+            return (int16_t) ((110L * ((int64_t) val - 10L)) / (2730L - 10L));
         }
 
         int8_t readCalculatedValue() {
