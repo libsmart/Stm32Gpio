@@ -71,7 +71,9 @@ namespace Stm32Gpio {
             return currentAdcValueReady ? currentAdcValue : (currentAdcValue = readValueFromAdc());
         }
 
-        static int16_t calculateValue(uint32_t val) {
+        [[nodiscard]] int32_t calculateValue(const uint32_t val) const {
+            return map(val, mapInMin, mapInMax, mapOutMin, mapOutMax);
+
             /*
              * 0    |    0V |  0mA | -27%
              * 819  | 0.66V |  4mA |   0%
@@ -85,7 +87,6 @@ namespace Stm32Gpio {
             // return (int16_t) ((110L * ((int64_t) val - 819L)) / (4096L - 819L));
 
 
-
             /*
              * 0    |    0V |  0mA |   0%
              * 10   |    0V |  5mA |   0%
@@ -95,11 +96,19 @@ namespace Stm32Gpio {
              * U(0) = R*I(0) = 106Ω*4mA = 0.424V
              * p = 110*(v-10)/(2730-10) =
              */
-            return (int16_t) ((110L * ((int64_t) val - 10L)) / (2730L - 10L));
+            return (int16_t) ((110L * ((int64_t) val - 10L)) / (2200L - 10L));
+            //return (int16_t) ((110L * ((int64_t) val - 10L)) / (2730L - 10L));
         }
 
         int16_t readCalculatedValue() {
             return calculateValue(readValue());
+        }
+
+        virtual void setCalculatedValueMap(const int32_t inMin, const int32_t inMax, const int32_t outMin, const int32_t outMax) {
+            mapInMin = inMin;
+            mapInMax = inMax;
+            mapOutMin = outMin;
+            mapOutMax = outMax;
         }
 
     protected:
@@ -117,6 +126,11 @@ namespace Stm32Gpio {
         bool currentAdcValueReady = false;
         //    uint32_t lastLoopAdcValue = 0;
         uint32_t lastChangeHandlerAdcValue = 0;
+
+        int32_t mapInMin = 0;
+        int32_t mapInMax = 4095;
+        int32_t mapOutMin = 0;
+        int32_t mapOutMax = 4095;
 
         ADC_HandleTypeDef *hadc;
         uint32_t ADC_Channel;
