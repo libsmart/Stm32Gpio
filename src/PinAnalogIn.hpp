@@ -72,7 +72,7 @@ namespace Stm32Gpio {
         }
 
         [[nodiscard]] int32_t calculateValue(const uint32_t val) const {
-            return map(val, mapInMin, mapInMax, mapOutMin, mapOutMax);
+            return std::max(std::min(map(val, mapInMin, mapInMax, mapOutMin, mapOutMax), absOutMax), absOutMin);
 
             /*
              * 0    |    0V |  0mA | -27%
@@ -104,11 +104,17 @@ namespace Stm32Gpio {
             return calculateValue(readValue());
         }
 
-        virtual void setCalculatedValueMap(const int32_t inMin, const int32_t inMax, const int32_t outMin, const int32_t outMax) {
+        virtual void setCalculatedValueMap(const int32_t inMin, const int32_t inMax,
+                                           const int32_t outMin, const int32_t outMax) {
             mapInMin = inMin;
             mapInMax = inMax;
             mapOutMin = outMin;
             mapOutMax = outMax;
+        }
+
+        virtual void setAbsoluteMinMax(const int32_t absOutMin, const int32_t absOutMax) {
+            this->absOutMin = absOutMin;
+            this->absOutMax = absOutMax;
         }
 
     protected:
@@ -131,6 +137,8 @@ namespace Stm32Gpio {
         int32_t mapInMax = 4095;
         int32_t mapOutMin = 0;
         int32_t mapOutMax = 4095;
+        int32_t absOutMin = INT32_MIN;
+        int32_t absOutMax = INT32_MAX;
 
         ADC_HandleTypeDef *hadc;
         uint32_t ADC_Channel;
